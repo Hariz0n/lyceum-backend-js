@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Class } from '../class/class.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Student {
@@ -8,7 +9,9 @@ export class Student {
   @Column() lastName: string;
   @Column({ default: '' }) middleName: string;
   @Column({ unique: true }) email: string;
-  @Column({ nullable: false }) passwordHash: string;
+  @Column({ nullable: false })
+  @Exclude()
+  passwordHash: string;
   @Column({ default: '' }) photoPath: string;
-  @ManyToOne(() => Class, (cls) => cls.id) classId: number;
+  @ManyToOne(() => Class, (cls) => cls.students) class: Class;
 }
