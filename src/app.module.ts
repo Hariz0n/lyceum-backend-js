@@ -14,6 +14,9 @@ import { Book } from './books/book.entity';
 import { BookModule } from './books/bookModule.entity';
 import { BookSubmodule } from './books/bookSubmodule.entity';
 import { Paragraph } from './books/paragraph.entity';
+import { LessonsModule } from './lessons/lessons.module';
+import { Lesson } from './lessons/entities/lesson.entity';
+import { Subject } from './lessons/entities/subject.entity';
 
 @Module({
   imports: [
@@ -32,6 +35,8 @@ import { Paragraph } from './books/paragraph.entity';
         BookModule,
         BookSubmodule,
         Paragraph,
+        Lesson,
+        Subject,
       ],
       synchronize: true,
     }),
@@ -40,6 +45,7 @@ import { Paragraph } from './books/paragraph.entity';
     ClassModule,
     TeacherModule,
     BooksModule,
+    LessonsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
