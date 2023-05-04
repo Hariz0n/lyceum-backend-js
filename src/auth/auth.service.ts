@@ -37,7 +37,7 @@ export class AuthService {
         throw new HttpException('Wrong type', HttpStatus.BAD_REQUEST);
     }
 
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id, type: type };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
@@ -49,7 +49,7 @@ export class AuthService {
     password: string;
     email: string;
     type: 'student' | 'teacher';
-  }): Promise<Student | Teacher> {
+  }): Promise<{ access_token: string }> {
     let existingUser: Student | Teacher;
     switch (user.type) {
       case 'student':
@@ -67,19 +67,33 @@ export class AuthService {
     const passHash = await bcrypt.hash(user.password, 12);
     switch (user.type) {
       case 'student':
-        return await this.studentService.addStudent({
+        const addedStudent = await this.studentService.addStudent({
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
           passwordHash: passHash,
         });
+        return {
+          access_token: await this.jwtService.signAsync({
+            id: addedStudent.id,
+            email: addedStudent.email,
+            type: user.type,
+          }),
+        };
       case 'teacher':
-        return await this.teacherService.addTeacher({
+        const addedTeacher = await this.teacherService.addTeacher({
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
           passwordHash: passHash,
         });
+        return {
+          access_token: await this.jwtService.signAsync({
+            id: addedTeacher.id,
+            email: addedTeacher.email,
+            type: user.type,
+          }),
+        };
       default:
         throw new UnauthorizedException();
     }
