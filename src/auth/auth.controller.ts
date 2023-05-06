@@ -1,47 +1,20 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  HttpCode,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginDto } from './dtos/login.dto';
+import { ClassValidationPipe } from '../shared/class-validation.pipe';
+import { RegisterDto } from './dtos/register.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(
-    @Body('email') email: string,
-    @Body('password') pass: string,
-    @Body('type') type: 'student' | 'teacher',
-  ) {
-    if (email && pass) {
-      return this.authService.login(email, pass, type);
-    }
-    throw new BadRequestException();
+  signIn(@Body(new ClassValidationPipe()) loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @Post('register')
-  signUp(
-    @Body('firstName') firstName: string,
-    @Body('lastName') lastName: string,
-    @Body('email') email: string,
-    @Body('password') password: string,
-    @Body('type') type: 'student' | 'teacher',
-  ) {
-    if (firstName && lastName && email && password && type) {
-      return this.authService.register({
-        firstName,
-        lastName,
-        email,
-        password,
-        type,
-      });
-    }
-    throw new BadRequestException();
+  signUp(@Body(new ClassValidationPipe()) registerDto: RegisterDto) {
+    return this.authService.register(registerDto);
   }
 }

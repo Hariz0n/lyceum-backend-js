@@ -10,6 +10,8 @@ import { StudentService } from '../student/student.service';
 import { TeacherService } from '../teacher/teacher.service';
 import { Student } from '../student/student.entity';
 import { Teacher } from '../teacher/teacher.entity';
+import { LoginDto } from './dtos/login.dto';
+import { RegisterDto } from './dtos/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,18 +20,24 @@ export class AuthService {
     private teacherService: TeacherService,
     private jwtService: JwtService,
   ) {}
-  async login(email: string, pass: string, type: 'student' | 'teacher') {
+  async login(loginDto: LoginDto) {
     let user: Student | Teacher;
-    switch (type) {
+    switch (loginDto.type) {
       case 'student':
-        user = await this.studentService.getStudentByEmail(email);
-        if (!user || !(await bcrypt.compare(pass, user.passwordHash))) {
+        user = await this.studentService.getStudentByEmail(loginDto.email);
+        if (
+          !user ||
+          !(await bcrypt.compare(loginDto.password, user.passwordHash))
+        ) {
           throw new UnauthorizedException();
         }
         break;
       case 'teacher':
-        user = await this.teacherService.getTeacherByEmail(email);
-        if (!user || !(await bcrypt.compare(pass, user.passwordHash))) {
+        user = await this.teacherService.getTeacherByEmail(loginDto.email);
+        if (
+          !user ||
+          !(await bcrypt.compare(loginDto.password, user.passwordHash))
+        ) {
           throw new UnauthorizedException();
         }
         break;
@@ -37,26 +45,24 @@ export class AuthService {
         throw new HttpException('Wrong type', HttpStatus.BAD_REQUEST);
     }
 
-    const payload = { email: user.email, sub: user.id, type: type };
+    const payload = { email: user.email, sub: user.id, type: loginDto.type };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
 
-  async register(user: {
-    firstName: string;
-    lastName: string;
-    password: string;
-    email: string;
-    type: 'student' | 'teacher';
-  }): Promise<{ access_token: string }> {
+  async register(registerDto: RegisterDto): Promise<{ access_token: string }> {
     let existingUser: Student | Teacher;
-    switch (user.type) {
+    switch (registerDto.type) {
       case 'student':
-        existingUser = await this.studentService.getStudentByEmail(user.email);
+        existingUser = await this.studentService.getStudentByEmail(
+          registerDto.email,
+        );
         break;
       case 'teacher':
-        existingUser = await this.teacherService.getTeacherByEmail(user.email);
+        existingUser = await this.teacherService.getTeacherByEmail(
+          registerDto.email,
+        );
         break;
       default:
         throw new UnauthorizedException();
@@ -64,34 +70,34 @@ export class AuthService {
     if (existingUser) {
       throw new HttpException('User is existing', HttpStatus.BAD_REQUEST);
     }
-    const passHash = await bcrypt.hash(user.password, 12);
-    switch (user.type) {
+    const passHash = await bcrypt.hash(registerDto.password, 12);
+    switch (registerDto.type) {
       case 'student':
         const addedStudent = await this.studentService.addStudent({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
+          firstName: registerDto.firstName,
+          lastName: registerDto.lastName,
+          email: registerDto.email,
           passwordHash: passHash,
         });
         return {
           access_token: await this.jwtService.signAsync({
             id: addedStudent.id,
             email: addedStudent.email,
-            type: user.type,
+            type: registerDto.type,
           }),
         };
       case 'teacher':
         const addedTeacher = await this.teacherService.addTeacher({
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
+          firstName: registerDto.firstName,
+          lastName: registerDto.lastName,
+          email: registerDto.email,
           passwordHash: passHash,
         });
         return {
           access_token: await this.jwtService.signAsync({
             id: addedTeacher.id,
             email: addedTeacher.email,
-            type: user.type,
+            type: registerDto.type,
           }),
         };
       default:
