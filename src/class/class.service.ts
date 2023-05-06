@@ -12,6 +12,13 @@ export class ClassService {
       where: { id },
       relations: {
         students: true,
+        classSubjectTeacher: {
+          teacher: true,
+          subject: true,
+        },
+        classLesson: {
+          lesson: true,
+        },
       },
     });
   }

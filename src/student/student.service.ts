@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './student.entity';
 import { Repository } from 'typeorm';
+import { CreateStudentDto } from './dtos/create-student.dto';
 
 @Injectable()
 export class StudentService {
@@ -16,8 +17,20 @@ export class StudentService {
   async getStudentByEmail(email: string) {
     return this.studentRepo.findOneBy({ email });
   }
+  async getStudentById(id: number) {
+    return this.studentRepo.findOne({
+      where: { id },
+      relations: {
+        class: {
+          classLesson: {
+            lesson: true,
+          },
+        },
+      },
+    });
+  }
 
-  async addStudent(user: Partial<Student>): Promise<Student> {
+  async addStudent(user: CreateStudentDto): Promise<Student> {
     const newStudent = this.studentRepo.create(user);
     return this.studentRepo.save(newStudent);
   }

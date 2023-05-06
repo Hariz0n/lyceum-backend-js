@@ -6,10 +6,19 @@ import { BookSubmodule } from './bookSubmodule.entity';
 import { Paragraph } from './paragraph.entity';
 import { BooksController } from './books.controller';
 import { BooksService } from './books.service';
+import { Student } from '../student/student.entity';
+import { Teacher } from '../teacher/teacher.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Book, BookModule, BookSubmodule, Paragraph]),
+    TypeOrmModule.forFeature([
+      Book,
+      BookModule,
+      BookSubmodule,
+      Paragraph,
+      Student,
+      Teacher,
+    ]),
   ],
   controllers: [BooksController],
   providers: [BooksService],

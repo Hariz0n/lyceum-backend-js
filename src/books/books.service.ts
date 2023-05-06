@@ -24,7 +24,7 @@ export class BooksService {
 
   async getFullBookById(id: number, isFull = false): Promise<BooksExpDto> {
     const book = await this.bookRepo.findOne({
-      where: { id },
+      where: [{ id }],
       relations: isFull
         ? ['modules', 'modules.subModules', 'modules.subModules.paragraphs']
         : null,
@@ -46,6 +46,7 @@ export class BooksService {
       },
       where: [
         { name: Like(`%${data}%`) },
+        { subject: { name: Like(`%${data}%`) } },
         {
           modules: [
             { name: Like(`%${data}%`) },

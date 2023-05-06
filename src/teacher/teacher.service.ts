@@ -13,6 +13,10 @@ export class TeacherService {
     return this.teacherRepo.find();
   }
 
+  async getTeacherById(id: number) {
+    return this.teacherRepo.findOneBy({ id });
+  }
+
   async getTeacherByEmail(email: string) {
     return this.teacherRepo.findOneBy({ email });
   }

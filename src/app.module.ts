@@ -17,6 +17,9 @@ import { Paragraph } from './books/paragraph.entity';
 import { LessonsModule } from './lessons/lessons.module';
 import { Lesson } from './lessons/entities/lesson.entity';
 import { Subject } from './lessons/entities/subject.entity';
+import { ClassSubjectTeacher } from './class/class-subject-teacher.entity';
+import { ClassLesson } from './class/class-lesson.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -37,8 +40,13 @@ import { Subject } from './lessons/entities/subject.entity';
         Paragraph,
         Lesson,
         Subject,
+        ClassSubjectTeacher,
+        ClassLesson,
       ],
       synchronize: true,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     AuthModule,
     StudentModule,

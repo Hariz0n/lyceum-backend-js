@@ -1,5 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BookModule } from './bookModule.entity';
+import { Subject } from '../lessons/entities/subject.entity';
 
 @Entity()
 export class Book {
@@ -9,4 +16,5 @@ export class Book {
 
   @OneToMany(() => BookModule, (bsm) => bsm.book)
   modules: BookModule[];
+  @ManyToOne(() => Subject, (sbj) => sbj.books) subject: Subject;
 }
