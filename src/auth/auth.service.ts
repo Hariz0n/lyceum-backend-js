@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -25,11 +26,18 @@ export class AuthService {
     switch (loginDto.type) {
       case 'student':
         user = await this.studentService.getStudentByEmail(loginDto.email);
-        if (
-          !user ||
+        if (!user) {
+          throw new UnauthorizedException({
+            cause: 'noSuchUser',
+            statusCode: 401,
+          });
+        } else if (
           !(await bcrypt.compare(loginDto.password, user.passwordHash))
         ) {
-          throw new UnauthorizedException();
+          throw new UnauthorizedException({
+            cause: 'invalid password',
+            statusCode: 401,
+          });
         }
         break;
       case 'teacher':
@@ -42,7 +50,7 @@ export class AuthService {
         }
         break;
       default:
-        throw new HttpException('Wrong type', HttpStatus.BAD_REQUEST);
+        throw new BadRequestException({});
     }
 
     const payload = { email: user.email, sub: user.id, type: loginDto.type };

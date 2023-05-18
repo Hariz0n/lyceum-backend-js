@@ -35,6 +35,16 @@ export class BooksService {
     return book;
   }
 
+  async getSubmoduleParagraphs(subId: number) {
+    const sub = (
+      await this.bookSubmoduleRepo.findOne({
+        where: { id: subId },
+        relations: { paragraphs: true },
+      })
+    ).paragraphs;
+    return sub;
+  }
+
   async search(data: string): Promise<BooksExpDto[]> {
     const book = await this.bookRepo.find({
       relations: {

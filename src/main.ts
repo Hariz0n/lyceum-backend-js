@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
+  app.enableCors({ origin: true });
   const config = new DocumentBuilder()
     .setTitle('Lyceum REST API')
     .setDescription('REST API for lyceum 130')

@@ -2,9 +2,9 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Query,
   UseGuards,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -18,7 +18,7 @@ export class BooksController {
   constructor(private booksService: BooksService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.teacher)
+  @Roles(Role.teacher, Role.student)
   @ApiTags('Books')
   @ApiBearerAuth()
   @Get()
@@ -41,5 +41,12 @@ export class BooksController {
     @Query('isFull') isFull: boolean,
   ) {
     return this.booksService.getFullBookById(id, isFull !== undefined);
+  }
+
+  @ApiTags('Books')
+  @ApiBearerAuth()
+  @Get('submodules/:subModuleId')
+  getSubModuleParagraphs(@Param('subModuleId', ParseIntPipe) subId: number) {
+    return this.booksService.getSubmoduleParagraphs(subId);
   }
 }
