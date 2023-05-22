@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -19,8 +20,17 @@ export class LessonsController {
 
   @Get()
   @ApiTags('Lessons')
-  getLessons() {
-    return this.lessonsService.getAllLessons();
+  getLessons(@Query('subjectId') subjectId?: number) {
+    return this.lessonsService.getAllLessons(subjectId);
+  }
+
+  @Get('/class/:id')
+  @ApiTags('Lessons')
+  getClassLessonsById(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('subjectId') subjectId?: number,
+  ) {
+    return this.lessonsService.getClassLessonsById(id, subjectId);
   }
 
   @Post(':id/attachClass')

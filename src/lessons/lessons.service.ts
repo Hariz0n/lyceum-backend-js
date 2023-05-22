@@ -14,8 +14,9 @@ export class LessonsService {
     private classLessonRepo: Repository<ClassLesson>,
   ) {}
 
-  async getAllLessons() {
+  async getAllLessons(subjectId: number) {
     return this.lessonsRepo.find({
+      where: { subject: { id: subjectId } },
       relations: {
         subject: true,
       },
@@ -25,6 +26,20 @@ export class LessonsService {
   async getLessonById(id: number) {
     return this.lessonsRepo.findOne({
       where: { id },
+      relations: {
+        subject: true,
+      },
+    });
+  }
+
+  async getClassLessonsById(id: number, subjectId?: number) {
+    return this.lessonsRepo.find({
+      where: {
+        subjectId,
+        classSubject: {
+          classId: id,
+        },
+      },
       relations: {
         subject: true,
       },
