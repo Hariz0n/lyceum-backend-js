@@ -14,13 +14,14 @@ import { CreateHelpRequestDto } from './dto/create-help-request.dto';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
 import { Role } from '../auth/role.enum';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('help-request')
 export class HelpRequestController {
   constructor(private readonly helpRequestService: HelpRequestService) {}
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.student)
   @Post()
   create(@Body() createHelpRequestDto: CreateHelpRequestDto) {
