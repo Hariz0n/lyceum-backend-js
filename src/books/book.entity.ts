@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BookModule } from './bookModule.entity';
-import { Subject } from '../lessons/entities/subject.entity';
+import { Subject } from '../subjects/entities/subject.entity';
 
 @Entity()
 export class Book {

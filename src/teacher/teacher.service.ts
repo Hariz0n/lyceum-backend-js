@@ -14,7 +14,15 @@ export class TeacherService {
   }
 
   async getTeacherById(id: number) {
-    return this.teacherRepo.findOneBy({ id });
+    return this.teacherRepo.findOne({
+      where: { id },
+      relations: {
+        classSubjectTeacher: {
+          cls: true,
+          subject: true,
+        },
+      },
+    });
   }
 
   async getTeacherByEmail(email: string) {

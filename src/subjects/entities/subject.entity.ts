@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Lesson } from './lesson.entity';
+import { Lesson } from '../../lessons/entities/lesson.entity';
 import { ClassSubjectTeacher } from '../../class/class-subject-teacher.entity';
 import { Book } from '../../books/book.entity';
 

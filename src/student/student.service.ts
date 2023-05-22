@@ -23,7 +23,9 @@ export class StudentService {
       relations: {
         class: {
           classLesson: {
-            lesson: true,
+            lesson: {
+              subject: true,
+            },
           },
         },
       },
