@@ -84,6 +84,7 @@ export class AuthService {
         const addedStudent = await this.studentService.addStudent({
           firstName: registerDto.firstName,
           lastName: registerDto.lastName,
+          middleName: registerDto.middleName,
           email: registerDto.email,
           passwordHash: passHash,
         });
