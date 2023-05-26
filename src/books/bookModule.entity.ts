@@ -12,7 +12,7 @@ import { BookSubmodule } from './bookSubmodule.entity';
 export class BookModule {
   @PrimaryGeneratedColumn() id: number;
   @Column() name: string;
-  @ManyToOne(() => Book, (book) => book.modules)
+  @ManyToOne(() => Book, (book) => book.modules, { onDelete: 'CASCADE' })
   book: Book;
   @OneToMany(() => BookSubmodule, (bsm) => bsm.module)
   subModules: BookSubmodule[];

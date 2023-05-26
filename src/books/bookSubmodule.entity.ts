@@ -12,6 +12,7 @@ import { Paragraph } from './paragraph.entity';
 export class BookSubmodule {
   @PrimaryGeneratedColumn() id: number;
   @Column() name: string;
-  @ManyToOne(() => BookModule, (bm) => bm.subModules) module: BookModule;
+  @ManyToOne(() => BookModule, (bm) => bm.subModules, { onDelete: 'CASCADE' })
+  module: BookModule;
   @OneToMany(() => Paragraph, (prg) => prg.subModule) paragraphs: Paragraph[];
 }

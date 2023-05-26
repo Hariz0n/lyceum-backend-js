@@ -5,5 +5,6 @@ import { BookSubmodule } from './bookSubmodule.entity';
 export class Paragraph {
   @PrimaryGeneratedColumn() id: number;
   @Column({ type: 'longtext' }) data: string;
-  @ManyToOne(() => BookSubmodule, (bsm) => bsm.module) subModule: BookSubmodule;
+  @ManyToOne(() => BookSubmodule, (bsm) => bsm.module, { onDelete: 'CASCADE' })
+  subModule: BookSubmodule;
 }

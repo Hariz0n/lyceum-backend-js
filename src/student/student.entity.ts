@@ -21,7 +21,8 @@ export class Student {
   @Exclude()
   passwordHash: string;
   @Column({ default: '' }) photoPath: string;
-  @ManyToOne(() => Class, (cls) => cls.students) class: Class;
+  @ManyToOne(() => Class, (cls) => cls.students, { onDelete: 'NO ACTION' })
+  class: Class;
   @OneToMany(() => HelpRequest, (req) => req.applicant)
   helpRequests: HelpRequest[];
   @OneToMany(() => SolvedHelpRequest, (shr) => shr.applicant)

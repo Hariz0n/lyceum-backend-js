@@ -13,6 +13,7 @@ import { LessonsService } from './lessons.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { EditLessonDto } from './dto/edit-lesson.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { UnattachClassDto } from './dto/unattach-class.dto';
 
 @Controller('lessons')
 export class LessonsController {
@@ -61,9 +62,9 @@ export class LessonsController {
     return this.lessonsService.editLesson(Number(id), editDto);
   }
 
-  @Delete()
+  @Delete('unattach-class')
   @ApiTags('Lessons')
-  deleteLesson(@Query('id') id) {
-    return this.lessonsService.removeLesson(id);
+  deleteLesson(@Body() unattachClassDto: UnattachClassDto) {
+    return this.lessonsService.unAttachClass(unattachClassDto);
   }
 }

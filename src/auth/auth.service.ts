@@ -90,7 +90,7 @@ export class AuthService {
         });
         return {
           access_token: await this.jwtService.signAsync({
-            id: addedStudent.id,
+            sub: addedStudent.id,
             email: addedStudent.email,
             type: registerDto.type,
           }),
@@ -99,12 +99,13 @@ export class AuthService {
         const addedTeacher = await this.teacherService.addTeacher({
           firstName: registerDto.firstName,
           lastName: registerDto.lastName,
+          middleName: registerDto.middleName,
           email: registerDto.email,
           passwordHash: passHash,
         });
         return {
           access_token: await this.jwtService.signAsync({
-            id: addedTeacher.id,
+            sub: addedTeacher.id,
             email: addedTeacher.email,
             type: registerDto.type,
           }),

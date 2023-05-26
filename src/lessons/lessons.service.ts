@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { EditLessonDto } from './dto/edit-lesson.dto';
 import { ClassLesson } from '../class/class-lesson.entity';
+import { UnattachClassDto } from './dto/unattach-class.dto';
 
 @Injectable()
 export class LessonsService {
@@ -65,5 +66,20 @@ export class LessonsService {
       lessonId,
     });
     return this.classLessonRepo.save(newAttach);
+  }
+
+  async unAttachClass(unattachClassDto: UnattachClassDto) {
+    const user = await this.classLessonRepo.findOne({
+      where: {
+        lesson: {
+          id: unattachClassDto.lessonId,
+        },
+        class: {
+          id: unattachClassDto.classId,
+        },
+      },
+    });
+
+    return this.classLessonRepo.delete(user);
   }
 }

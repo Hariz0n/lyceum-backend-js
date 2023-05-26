@@ -32,7 +32,7 @@ import { SolvedHelpRequest } from './help-request/entities/solved-help-request.e
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '}{vrPMxDsZY3JwUd',
       database: 'mydatabase',
       entities: [
         Class,
@@ -49,7 +49,7 @@ import { SolvedHelpRequest } from './help-request/entities/solved-help-request.e
         HelpRequest,
         SolvedHelpRequest,
       ],
-      synchronize: true,
+      synchronize: false,
     }),
     ConfigModule.forRoot({
       isGlobal: true,
