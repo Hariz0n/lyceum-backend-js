@@ -32,7 +32,7 @@ import { SolvedHelpRequest } from './help-request/entities/solved-help-request.e
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '}{vrPMxDsZY3JwUd',
+      password: 'root',
       database: 'mydatabase',
       entities: [
         Class,
